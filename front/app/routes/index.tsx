@@ -1,5 +1,5 @@
 import { json } from '@remix-run/node'
-import { Link, useLoaderData } from '@remix-run/react'
+import { Link, Outlet, useLoaderData } from '@remix-run/react'
 import { DefaultService, Series } from '../client'
 
 export const loader = async () => {
@@ -18,6 +18,7 @@ export default function Main() {
           <li key={s.id}><Link to={`series/${s.id}`}>{s.name}</Link></li>
         ))}
       </ol>
+      <Outlet />
     </div>
   )
 }
