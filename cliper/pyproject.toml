@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "clipselect2-cliper"
+version = "0.1.0"
+description = "A microservice for cliping data for ClipSelect2"
+authors = ["Grzegorz Koperwas <admin@grzegorzkoperwas.site>"]
+license = "GPL"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.79.0"
+dramatiq = "^1.13.0"
+SQLAlchemy = "^1.4.39"
+asyncpg = "^0.26.0"
+
+[tool.poetry.dev-dependencies]
+uvicorn = "^0.18.2"
+black = "^22.6.0"
+aiosqlite = "^0.17.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
