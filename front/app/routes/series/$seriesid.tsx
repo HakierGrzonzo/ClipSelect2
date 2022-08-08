@@ -1,20 +1,32 @@
 import { json, LoaderFunction } from '@remix-run/node'
-import { Link, useLoaderData } from '@remix-run/react'
-import { DefaultService, Series } from '../../client'
-
-interface IParams {
-  seriesid: string
-}
+import { Link, Outlet, useLoaderData } from '@remix-run/react'
+import { DataService, FullSeries, Series } from '../../client'
 
 export const loader: LoaderFunction = async ({params}) => {
   const { seriesid } = params;
-  const series = await DefaultService.getSeriesSeriesGet()
-  return json(series.find(s => s.id === seriesid).subseries)
+  const series = await DataService.getSeriesByTitleSeriesByTitleGet(seriesid)
+  return json(series)
 }
 
 export default function Series() {
-  const subSeries = useLoaderData()
+  const series = useLoaderData() as unknown as FullSeries
   return (
-    <p>{JSON.stringify(subSeries)}</p>
+    <div>
+        <h2>{series.name}</h2>
+        <Outlet/>
+        <ul>
+            {series.subseries.sort((a, b) => a.order - b.order).map(subseries => (
+            <li key={subseries.id}>{subseries.name}
+                <ul>
+                    {subseries.episodes.sort((a, b) => a.order - b.order).map(episode => (
+                    <li key={episode.id}>
+                        <Link to={`${episode.id}`}>{episode.order} - {episode.name}</Link>
+                    </li>
+                    ))}
+                </ul>
+            </li>
+            ))}
+        </ul>
+    </div>
   )
 }

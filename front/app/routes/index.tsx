@@ -1,9 +1,9 @@
 import { json } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
-import { DefaultService, Series } from '../client'
+import { Series, DataService } from '../client'
 
 export const loader = async () => {
-  const series = await DefaultService.getSeriesSeriesGet()
+  const series = await DataService.getSeriesSeriesGet()
   return json(series)
 }
 
@@ -15,7 +15,7 @@ export default function Main() {
       <p>Welcome to ClipSelect2, we have like {series.length} things here</p>
       <ol>
         {series.map((s: Series) => (
-          <li key={s.id}><Link to={`series/${s.id}`}>{s.name}</Link></li>
+          <li key={s.id}><Link to={`series/${s.name}`}>{s.name}</Link></li>
         ))}
       </ol>
       <Outlet />
