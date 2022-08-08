@@ -2,7 +2,7 @@ from typing import AsyncGenerator
 from uuid import uuid4
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import relationship, sessionmaker, declarative_base
+from sqlalchemy.orm import backref, relationship, sessionmaker, declarative_base
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import (
     ForeignKey,
@@ -22,7 +22,11 @@ DATABASE_URL = environ.get("DATABASE", "sqlite+aiosqlite:///./test.db")
 
 engine = create_async_engine(DATABASE_URL)
 SessionLocal = sessionmaker(
-    autocommit=False, class_=AsyncSession, autoflush=False, bind=engine
+    autocommit=False,
+    autoflush=False,
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
 )
 
 Base: DeclarativeMeta = declarative_base()
@@ -33,23 +37,37 @@ class Series(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = Column(String(128), nullable=False, index=True)
     subseries = relationship(
-        "SubSeries", back_populates="series", lazy="joined"
+        "SubSeries",
+        lazy="raise",
+        back_populates="series",
+        passive_deletes=True,
     )
+
+    __mapper_args__ = {"eager_defaults": True}
 
 
 class SubSeries(Base):
     __tablename__ = "SubSeries"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     series_id = Column(
-        UUID(as_uuid=True), ForeignKey("Series.id", use_alter=True), index=True
+        UUID(as_uuid=True),
+        ForeignKey("Series.id", use_alter=True, ondelete="CASCADE"),
+        index=True,
+        nullable=False,
     )
-    series = relationship("Series", back_populates="subseries", lazy="joined")
+    order = Column(Integer())
 
     name = Column(String(128), nullable=False, index=True)
 
+    series = relationship("Series", lazy="joined", back_populates="subseries")
     episodes = relationship(
-        "Episode", back_populates="subseries", lazy="joined"
+        "Episode",
+        lazy="raise",
+        back_populates="subseries",
+        passive_deletes=True,
     )
+
+    __mapper_args__ = {"eager_defaults": True}
 
 
 class Episode(Base):
@@ -57,25 +75,38 @@ class Episode(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     subseries_id = Column(
         UUID(as_uuid=True),
-        ForeignKey("SubSeries.id", use_alter=True),
+        ForeignKey("SubSeries.id", use_alter=True, ondelete="CASCADE"),
+        nullable=False,
         index=True,
     )
+
+    order = Column(Integer())
+    name = Column(String(128), nullable=False, index=True)
+    path = Column(String(256), nullable=False)
+
     subseries = relationship(
-        "SubSeries", back_populates="episodes", lazy="joined"
+        "SubSeries", lazy="joined", back_populates="episodes"
+    )
+    captions = relationship(
+        "Caption",
+        lazy="raise",
+        back_populates="episode",
+        passive_deletes=True,
     )
 
-    name = Column(String(128), nullable=False, index=True)
-
-    captions = relationship("Caption", back_populates="episode", lazy="joined")
+    __mapper_args__ = {"eager_defaults": True}
 
 
 class Caption(Base):
     __tablename__ = "Caption"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     episode_id = Column(
-        UUID(as_uuid=True), ForeignKey("Episode.id", use_alter=True), index=True
+        UUID(as_uuid=True),
+        ForeignKey("Episode.id", use_alter=True, ondelete="CASCADE"),
+        index=True,
+        nullable=False,
     )
-    episode = relationship("Episode", back_populates="captions", lazy="joined")
+    episode = relationship("Episode", lazy="joined", back_populates="captions")
 
     # The content of the subtitles for the caption
     text = Column(String(256), nullable=False)

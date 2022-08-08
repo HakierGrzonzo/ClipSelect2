@@ -11,6 +11,7 @@ fastapi = "^0.79.0"
 dramatiq = "^1.13.0"
 SQLAlchemy = "^1.4.39"
 asyncpg = "^0.26.0"
+aiofiles = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
 uvicorn = "^0.18.2"

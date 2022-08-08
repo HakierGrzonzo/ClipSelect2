@@ -16,12 +16,13 @@ if config.config_file_name is not None:
 
 from os import environ
 
-db_uri = environ["DATABASE"].replace("+asyncpg","")
+db_uri = environ["DATABASE"].replace("+asyncpg", "")
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from app import Base
+
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -65,7 +66,7 @@ def run_migrations_online() -> None:
         config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
-        url=db_uri
+        url=db_uri,
     )
 
     with connectable.connect() as connection:

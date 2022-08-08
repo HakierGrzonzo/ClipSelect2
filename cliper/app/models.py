@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import UUID4, BaseModel
 
 
@@ -21,13 +21,25 @@ class Caption(BaseModel):
         orm_mode = True
 
 
-class Episode(_protoModel):
-    pass
+class ProtoEpisode(_protoModel):
+    order: int
 
 
-class SubSeries(_protoModel):
-    episodes: List[Episode] = []
+class Episode(ProtoEpisode):
+    captions: List[Caption]
+
+
+class ProtoSubSeries(_protoModel):
+    order: int
+
+
+class SubSeries(ProtoSubSeries):
+    episodes: List[ProtoEpisode]
 
 
 class Series(_protoModel):
-    subseries: List[SubSeries] = []
+    subseries: List[ProtoSubSeries]
+
+
+class FullSeries(_protoModel):
+    subseries: List[SubSeries]
