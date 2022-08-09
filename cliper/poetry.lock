@@ -10,7 +10,7 @@ python-versions = ">=3.6,<4.0"
 name = "aiosqlite"
 version = "0.17.0"
 description = "asyncio bridge to the standard sqlite3 module"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -21,7 +21,7 @@ typing_extensions = ">=3.7.2"
 name = "alembic"
 version = "1.8.1"
 description = "A database migration tool for SQLAlchemy."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -87,7 +87,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 name = "click"
 version = "8.1.3"
 description = "Composable command line interface toolkit"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -98,7 +98,7 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 name = "colorama"
 version = "0.4.5"
 description = "Cross-platform colored terminal text."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -155,7 +155,7 @@ docs = ["sphinx"]
 name = "h11"
 version = "0.13.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -171,7 +171,7 @@ python-versions = ">=3.5"
 name = "mako"
 version = "1.2.1"
 description = "A super-fast templating language that borrows the best ideas from the existing templating languages."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -187,7 +187,7 @@ testing = ["pytest"]
 name = "markupsafe"
 version = "2.1.1"
 description = "Safely add untrusted strings to HTML/XML markup."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -234,7 +234,7 @@ twisted = ["twisted"]
 name = "psycopg2"
 version = "2.9.3"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -327,7 +327,7 @@ python-versions = ">=3.7"
 name = "uvicorn"
 version = "0.18.2"
 description = "The lightning-fast ASGI server."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -341,7 +341,7 @@ standard = ["websockets (>=10.0)", "httptools (>=0.4.0)", "watchfiles (>=0.13)",
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "432ba02d8a69a693402f395d0ed69d73cd747be9866de3fd58dbf8525c62d0ee"
+content-hash = "aa2757e2c98efaee6cf16d9c88cdcf4a2071c7daeef980bbf18bcd986400a17d"
 
 [metadata.files]
 aiofiles = [

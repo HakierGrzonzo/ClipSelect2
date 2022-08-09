@@ -12,6 +12,10 @@ dramatiq = "^1.13.0"
 SQLAlchemy = "^1.4.39"
 asyncpg = "^0.26.0"
 aiofiles = "^0.8.0"
+aiosqlite = "^0.17.0"
+alembic = "^1.8.1"
+psycopg2 = "^2.9.3"
+uvicorn = "^0.18.2"
 
 [tool.poetry.dev-dependencies]
 uvicorn = "^0.18.2"

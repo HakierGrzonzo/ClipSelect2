@@ -1,0 +1,24 @@
+FROM python:3.10 AS openapi
+
+RUN python3 -m pip install poetry
+WORKDIR /backend 
+COPY ./cliper/poetry.lock ./cliper/pyproject.toml ./
+RUN poetry config virtualenvs.in-project true --local
+RUN poetry install --no-dev
+COPY ./cliper .
+RUN poetry run python -m app openapi.json
+
+FROM node:16-alpine AS builder
+WORKDIR /frontend
+COPY ./front/package.json ./
+RUN npm install
+ENV NODE_ENV=production
+RUN mkdir app 
+COPY --from=openapi /backend/openapi.json .
+RUN npm run openprod
+COPY ./front ./
+RUN npm run build
+CMD ["npm", "run" ,"start"]
+
+
+

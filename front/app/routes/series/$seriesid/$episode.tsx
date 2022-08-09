@@ -1,11 +1,12 @@
 import { json, LoaderFunction } from '@remix-run/node'
 import { Form, useLoaderData } from '@remix-run/react'
-import { DataService, Episode } from '../../../client'
+import { Episode } from '../../../client';
+import { backendClient } from '~/api';
 
 export const loader: LoaderFunction = async (props) => {
   const { episode: episode_uuid } = props.params;
   const url = new URL(props.request.url)
-  const episode = await DataService.getEpisodeByUuidEpisodeGet(episode_uuid, url.searchParams.get('search') || '')
+  const episode = await backendClient.episode.getEpisodeByUuidEpisodeGet(episode_uuid, url.searchParams.get('search') || '')
   return json(episode)
 }
 

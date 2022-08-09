@@ -1,10 +1,11 @@
 import { json, LoaderFunction } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
-import { DataService, FullSeries, Series } from '../../client'
+import { FullSeries } from '~/client';
+import { backendClient } from '~/api';
 
 export const loader: LoaderFunction = async ({params}) => {
   const { seriesid } = params;
-  const series = await DataService.getSeriesByTitleSeriesByTitleGet(seriesid)
+  const series = await backendClient.series.getSeriesByTitleSeriesByTitleGet(seriesid)
   return json(series)
 }
 

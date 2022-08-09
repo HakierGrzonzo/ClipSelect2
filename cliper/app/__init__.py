@@ -1,3 +1,4 @@
+from os import environ
 from fastapi import FastAPI
 from .series import router as series_router
 from .episodes import router as episode_router
@@ -10,7 +11,6 @@ from .database import (
 
 app = FastAPI(
     title="A cliper microservice for ClipSelect2",
-    openapi_prefix="http://localhost:8000/",
 )
 
 

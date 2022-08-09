@@ -1,0 +1,11 @@
+FROM python:3.10 AS openapi
+
+RUN python3 -m pip install poetry
+WORKDIR /backend 
+COPY ./cliper/poetry.lock ./cliper/pyproject.toml ./
+RUN poetry config virtualenvs.in-project true --local
+RUN poetry install --no-dev
+COPY ./cliper .
+ENV DATABASE=postgresql+asyncpg://postgres:postgres@db:5432/clipselect 
+ENTRYPOINT /backend/backend_runner.sh
+

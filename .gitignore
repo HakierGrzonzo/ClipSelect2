@@ -1,4 +1,6 @@
 /local/
+/tv/
+/db/
 /ionic/
 /redis/
 /files/*

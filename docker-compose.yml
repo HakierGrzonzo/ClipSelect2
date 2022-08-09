@@ -1,0 +1,40 @@
+services:
+  front:
+    ports:
+      - "3000:3000"
+    build:
+      context: .
+      dockerfile: Dockerfile.front
+    depends_on:
+      - cliper
+
+  cliper:
+    ports: 
+      - "8000:80"
+    build:
+      context: .
+      dockerfile: Dockerfile.cliper
+    depends_on:
+      - db
+    volumes:
+      - "./tv:/tv:ro"
+  
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=clipselect
+    volumes:
+      - "./db:/var/lib/postgresql/data/"
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - "8001:80"
+    depends_on:
+      - db
