@@ -94,6 +94,8 @@ class Episode(Base):
         passive_deletes=True,
     )
 
+    subtitle_track_index = Column(Integer(), nullable=False)
+
     __mapper_args__ = {"eager_defaults": True}
 
 

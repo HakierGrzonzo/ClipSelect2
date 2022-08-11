@@ -1,7 +1,7 @@
 import { json, LoaderFunction } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
 import { FullSeries } from '~/client';
-import { backendClient } from '~/api';
+import { backendClient, backendURL } from '~/api';
 
 export const loader: LoaderFunction = async ({params}) => {
   const { seriesid } = params;
@@ -21,6 +21,7 @@ export default function Series() {
                 <ul>
                     {subseries.episodes.sort((a, b) => a.order - b.order).map(episode => (
                     <li key={episode.id}>
+                        <img src={`${backendURL}/episode/${episode.id}`}/>
                         <Link to={`${episode.id}`}>{episode.order} - {episode.name}</Link>
                     </li>
                     ))}

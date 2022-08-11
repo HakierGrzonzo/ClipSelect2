@@ -4,7 +4,7 @@ from aiofiles import open
 from asyncio import gather, Task
 
 from app.database import Episode, Series, SubSeries
-from .episode import parse_episode_from_nfo
+from .episode import parse_episode_from_nfo, parse_episode_into_clips
 
 from .seasons import parse_season_from_nfo
 
@@ -34,14 +34,13 @@ async def walk_subseries(folder_path: str) -> SubSeries:
             )
     if meta is None:
         raise Exception(f"Failed to find meta in {folder_path}")
-    episodes = list(v for v in episodes.values())
+    episodes = await gather(
+        *[parse_episode_into_clips(v) for v in episodes.values()]
+    )
     subseries = SubSeries(
         name=meta["name"],
         order=meta["order"],
-        episodes=list(
-            Episode(name=e["name"], order=e["order"], path=e["path"])
-            for e in episodes
-        ),
+        episodes=list(episodes),
     )
     return subseries
 

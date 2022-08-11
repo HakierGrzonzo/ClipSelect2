@@ -16,6 +16,8 @@ aiosqlite = "^0.17.0"
 alembic = "^1.8.1"
 psycopg2 = "^2.9.3"
 uvicorn = "^0.18.2"
+ffmpeg-python = "^0.2.0"
+subtitle-parser = "^1.1.0"
 
 [tool.poetry.dev-dependencies]
 uvicorn = "^0.18.2"

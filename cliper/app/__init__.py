@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from .series import router as series_router
 from .episodes import router as episode_router
 from .importer import router as import_router
+from .captions import router as caption_router
 
 from .database import (
     engine,
@@ -22,4 +23,5 @@ async def startup_event():
 
 app.include_router(series_router, prefix="/series", tags=["series", "data"])
 app.include_router(episode_router, prefix="/episode", tags=["episode", "data"])
+app.include_router(caption_router, prefix="/captions", tags=["caption", "data"])
 app.include_router(import_router, prefix="/import", tags=["internal"])
