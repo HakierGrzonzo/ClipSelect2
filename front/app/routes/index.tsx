@@ -1,25 +1,31 @@
-import { json } from '@remix-run/node'
-import { Link, Outlet, useLoaderData } from '@remix-run/react'
-import { Series } from '~/client'
-import { backendClient } from '~/api'
+import { json, LinksFunction, LoaderFunction } from "@remix-run/node"; // or cloudflare/deno
+import { Card, CardLinks } from '../components';
+import { backendClient } from '../api'
+import { colors } from '../colors'
+import { Link, useLoaderData } from "@remix-run/react";
+import { Series } from "../client/models/Series";
 
-export const loader = async () => {
+export const links: LinksFunction = () => {
+  return [...CardLinks()]
+}
+
+export const loader: LoaderFunction = async () => {
   const series = await backendClient.series.getSeriesSeriesGet();
   return json(series)
 }
 
-export default function Main() {
-  const series = useLoaderData()
-  return (
-    <div>
-      <h1>ClipSelect2</h1>
-      <p>Welcome to ClipSelect2, we have like {series.length} things here</p>
-      <ol>
-        {series.map((s: Series) => (
-          <li key={s.id}><Link to={`series/${s.name}`}>{s.name}</Link></li>
-        ))}
-      </ol>
-      <Outlet />
-    </div>
-  )
+export default function() {
+  const series = useLoaderData() as unknown as Series[];
+  return <>
+    <h1>ClipSelect</h1>
+    <article class='tile'>
+      {series.map(s => (
+        <Link key={s.id} to={`/series/${s.name}`}>
+          <Card color={colors.accentColor}>
+            {s.name}
+          </Card>
+        </Link>
+      ))}
+    </article>
+  </>
 }

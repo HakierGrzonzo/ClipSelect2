@@ -1,6 +1,6 @@
 import { AppClient } from './client/AppClient';
 
-export const backendURL = 'http://cliper'
+export const backendURL = 'http://localhost:8000'
 export const frontendURL = 'http://localhost:8000'
 
 export const backendClient = new AppClient({BASE: backendURL})

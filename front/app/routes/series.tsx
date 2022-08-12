@@ -1,11 +1,12 @@
 import { Link, Outlet } from "@remix-run/react";
 
-export default function Series() {
+export default function() {
   return (
-    <div> 
-        <Link to={'/'}>Go back</Link>
-      <h2>Series:</h2>
-      <Outlet/>
-    </div>
+    <>
+      <Link to='/'>go back</Link>
+      <article>
+        <Outlet/>
+      </article>
+    </>
   )
 }

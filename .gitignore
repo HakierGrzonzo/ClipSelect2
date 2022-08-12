@@ -11,6 +11,8 @@
 *.db
 *.aux
 *.out
+*.css
+*.css.map
 api-keys.env
 /front/app/client
 

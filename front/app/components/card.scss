@@ -1,0 +1,18 @@
+div.card {
+  margin: 1em;
+  border: 2px solid;
+  &.image {
+    display: flex;
+    align-items: center;
+    img {
+      height: 100%;
+      width: auto;
+    }
+    div.child-content { 
+      flex: 3
+    }
+  }
+  div.child-content { 
+    padding: 1em;
+  }
+}
