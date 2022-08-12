@@ -22,10 +22,7 @@ async def get_simple_caption(
         .scalars()
         .one()
     )
-    timing = {
-        'ss': f"{caption.start}",
-        't': f"{caption.stop - caption.start}"
-    }
+    timing = {"ss": f"{caption.start}", "t": f"{caption.stop - caption.start}"}
     temp = NamedTemporaryFile("wb+", suffix=".ass")
     subs, _ = await run_ffmpeg_async(
         ffmpeg.input(caption.episode.path, **timing)[
@@ -48,7 +45,7 @@ async def get_simple_caption(
                 **timing,
             ),
             temp.name,
-            t=timing['t']
+            t=timing["t"],
         )
     )
     temp.close()
@@ -82,8 +79,8 @@ async def get_multi_caption(
     if first_caption.episode.id != final_caption.episode.id:
         return HTTPException(status_code=400)
     timing = {
-        'ss': f"{first_caption.start}",
-        't': f"{final_caption.stop - first_caption.start}"
+        "ss": f"{first_caption.start}",
+        "t": f"{final_caption.stop - first_caption.start}",
     }
     temp = NamedTemporaryFile("wb+", suffix=".ass")
     subs, _ = await run_ffmpeg_async(
@@ -103,7 +100,7 @@ async def get_multi_caption(
                 **timing,
             ),
             temp.name,
-            t=timing['t']
+            t=timing["t"],
         )
     )
     return Response(content=clip, media_type="video/webm")

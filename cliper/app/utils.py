@@ -1,8 +1,11 @@
-from typing import Dict
+from collections import defaultdict
+from typing import List
 from asyncio import create_subprocess_exec, subprocess
 from tempfile import NamedTemporaryFile
 from typing import Tuple
 import ffmpeg
+
+from . import models
 
 from .database import Caption
 
@@ -80,3 +83,19 @@ def filter_webm_caption(stream, subtitle_filename: str, **output_params):
         **output_params,
         **FORMATS["webm"],
     )
+
+
+def reduce_captions(captions: List[Caption]) -> List[models.FullSubSeries]:
+    episodes = defaultdict(lambda: list())
+    for caption in captions:
+        episodes[caption.episode].append(models.Caption(**caption.__dict__))
+    subseries = defaultdict(lambda: list())
+    for episode, captions in episodes.items():
+        subseries[episode.subseries].append(
+            models.Episode(**episode.__dict__, captions=captions)
+        )
+    return list(
+        models.FullSubSeries(**subseries.__dict__, episodes=episodes)
+        for subseries, episodes in subseries.items()
+    )
+    pass

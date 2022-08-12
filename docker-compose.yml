@@ -38,3 +38,12 @@ services:
       - "8001:80"
     depends_on:
       - db
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.3.3
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9300:9300"
+      - "9200:9200"

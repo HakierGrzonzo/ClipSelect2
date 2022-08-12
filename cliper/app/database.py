@@ -2,15 +2,13 @@ from typing import AsyncGenerator
 from uuid import uuid4
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import backref, relationship, sessionmaker, declarative_base
+from sqlalchemy.orm import relationship, sessionmaker, declarative_base
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import (
     ForeignKey,
     Integer,
     String,
-    DateTime,
     Float,
-    create_engine,
 )
 from sqlalchemy.ext.declarative import DeclarativeMeta
 

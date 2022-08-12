@@ -37,9 +37,17 @@ class SubSeries(ProtoSubSeries):
     episodes: List[ProtoEpisode]
 
 
+class FullSubSeries(_protoModel):
+    episodes: List[Episode]
+
+
 class Series(_protoModel):
     subseries: List[ProtoSubSeries]
 
 
 class FullSeries(_protoModel):
     subseries: List[SubSeries]
+
+
+class CaptionSeries(_protoModel):
+    subseries: List[FullSubSeries]
