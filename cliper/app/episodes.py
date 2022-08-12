@@ -48,11 +48,11 @@ async def get_thumbnail_for_episode(
         .scalars()
         .one()
     )
-    a_random_caption = episode.captions[len(episode.captions) // 2]
-    a_random_time = (a_random_caption.start + a_random_caption.stop) / 4
+    a_random_caption = episode.captions[len(episode.captions) // 6]
+    a_random_time = (a_random_caption.start + a_random_caption.stop) / 2
     thumb, _ = await run_ffmpeg_async(
         ffmpeg.input(episode.path, ss=f"{a_random_time}")
         .filter("scale", 240, -1)
-        .output("pipe:", f="image2", vframes=1, **{"c:v": "webp"})
+        .output("pipe:", vframes=1, f="image2", **{"c:v": "mjpeg"})
     )
-    return Response(content=thumb, media_type="image/webp")
+    return Response(content=thumb, media_type="image/jpeg")

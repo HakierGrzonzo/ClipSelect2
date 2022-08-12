@@ -1,7 +1,7 @@
 import { json, LoaderFunction } from '@remix-run/node'
 import { Form, useLoaderData } from '@remix-run/react'
 import { Episode } from '../../../client';
-import { backendClient, backendURL } from '~/api';
+import { backendClient, frontendURL } from '~/api';
 
 export const loader: LoaderFunction = async (props) => {
   const { episode: episode_uuid } = props.params;
@@ -21,7 +21,7 @@ export default function Series() {
         </Form>
         <ul> 
             {episode.captions.map(c => (
-                <li key={c.id}><a href={`${backendURL}/captions/simple?clip_uuid=${c.id}`}>{c.text}</a></li>
+                <li key={c.id}><a href={`${frontendURL}/captions/simple?clip_uuid=${c.id}`}>{c.text}</a></li>
             ))}
         </ul>
     </div>

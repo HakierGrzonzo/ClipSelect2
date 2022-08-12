@@ -1,4 +1,5 @@
-FROM python:3.10 AS openapi
+FROM python:3.10-bullseye
+RUN apt update -y && apt install ffmpeg -y
 
 RUN python3 -m pip install poetry
 WORKDIR /backend 
