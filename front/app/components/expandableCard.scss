@@ -22,7 +22,7 @@ div.expandable-card {
 
   div.expandable-card-content {
     max-height: 10cm;
-    overflow-y: hidden;
+    overflow-y: auto;
     transition: max-height 400ms ease-in-out;
   }
   div.expandable-card-header {

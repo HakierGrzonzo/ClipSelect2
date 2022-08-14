@@ -1,0 +1,43 @@
+@import '../colors.scss';
+@import '../text.scss';
+
+ul.clip-list {
+  list-style-type: none;
+  max-width: 12cm;
+  width: 30vw;
+  max-height: 60vh;
+  overflow-y: scroll;
+  li {
+    border: 1px solid $accent-color;
+    margin: 1px;
+    padding: 2mm;
+    margin-left: 0mm;
+    margin-right: 10mm;
+    transition: all 300ms ease;
+    font-size: $small-text;
+    &:hover {
+      margin-left: 6mm !important;
+      margin-right: 0mm !important;
+    }
+    &.selected {
+      margin-left: 2mm;
+      margin-right: 6mm;
+    }
+    &:hover, &.selected {
+      border-color: $link-color;
+      font-size: $normal-text;
+      div.clip-list-footer {
+        margin-top: 1em;
+        height: 1em;
+        font-size: $subtitle;
+        color: $text-color;
+      }
+    }
+    div.clip-list-footer {
+      height: 0;
+      color: $background-color;
+      font-size: 1pt;
+      text-align: right;
+    }
+  }
+}
