@@ -5,6 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from tempfile import NamedTemporaryFile
 import ffmpeg
 
+from .cache import cache
+
 from .database import Caption, get_async_db
 from .utils import filter_gif_caption, filter_webm_caption, run_ffmpeg_async
 
@@ -12,6 +14,7 @@ router = APIRouter()
 
 
 @router.get("/simple")
+@cache()
 async def get_simple_caption(
     clip_uuid: str,
     format: str = "webm",
@@ -57,6 +60,7 @@ async def get_simple_caption(
 
 
 @router.get("/multi")
+@cache()
 async def get_multi_caption(
     from_clip: str,
     to_clip: str,

@@ -4,6 +4,7 @@ from .series import router as series_router
 from .episodes import router as episode_router
 from .importer import router as import_router
 from .captions import router as caption_router
+from .cache import create_cache_dir
 
 from .database import (
     engine,
@@ -17,6 +18,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup_event():
+    create_cache_dir()
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 

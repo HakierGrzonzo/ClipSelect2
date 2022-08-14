@@ -93,7 +93,6 @@ async def search_series(
         result_ids = list(
             UUID(result["_source"]["id"]) for result in results["hits"]["hits"]
         )
-        print(results)
         captions = (
             (
                 await session.execute(
