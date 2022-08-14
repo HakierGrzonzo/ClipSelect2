@@ -7,7 +7,7 @@ import ffmpeg
 
 from . import models
 
-from .database import Caption
+from .database import Caption, Episode, Series, SubSeries
 
 
 async def run_ffmpeg_async(
@@ -99,11 +99,13 @@ def reduce_captions(captions: List[Caption]) -> List[models.FullSubSeries]:
         for subseries, episodes in subseries.items()
     )
 
-T = TypeVar('T')
 
-def prev_current_next(iterable: List[T]) -> Generator[Tuple[T | None, T, T | None], None, None]:
+T = TypeVar("T")
+
+
+def prev_current_next(
+    iterable: List[T],
+) -> Generator[Tuple[T | None, T, T | None], None, None]:
     padded = [None, *iterable, None]
     for i in range(1, len(iterable) + 1):
-        yield padded[i-1], padded[i], padded[i+1]
-
-
+        yield padded[i - 1], padded[i], padded[i + 1]

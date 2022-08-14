@@ -1,3 +1,4 @@
 ./front/node_modules
 ./front/npm-debug.log
 ./front/app/client
+*.css

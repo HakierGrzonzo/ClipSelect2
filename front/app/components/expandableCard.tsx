@@ -19,18 +19,18 @@ interface IProps {
 }
 
 export function ExpandableCard(props: IProps) {
-  const { header, color, image } = props;
+  const { header, image } = props;
   const [expanded, toggleExpanded] = useReducer<boolean>((state: boolean) => !state, props.expanded || false)
 
   return (
-    <a onClick={() => toggleExpanded()} className={`expandable-card ${expanded && 'expanded'}`}>
-      <div className='expandable-card-header'>
-        <img {...props.image}/>
-        {header}
-      </div>
-      <div className='expandable-card-content'>
-        {props.children}
-      </div>
-    </a>
+    <div className={`expandable-card ${expanded ? 'expanded' : ''}`}>
+        <div onClick={() => toggleExpanded()} className='expandable-card-header'>
+          <img {...image}/>
+          {header}
+        </div>
+        <div className='expandable-card-content'>
+          {props.children}
+        </div>
+    </div>
   )
 }

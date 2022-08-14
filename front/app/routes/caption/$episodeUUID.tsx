@@ -1,4 +1,4 @@
-import { backendClient, frontendURL } from '../../api'
+import { backendClient, useFrontend } from '../../api'
 import { LoaderFunction, json } from "@remix-run/node";
 import { useLoaderData } from '@remix-run/react';
 import {Caption} from '../../client/models/Caption'
@@ -25,6 +25,7 @@ export const loader: LoaderFunction = async ({params, request}) => {
 
 export default function() {
    const {episode, caption} = useLoaderData() as IEpisodeAndCaption;
+   const { frontendURL } = useFrontend();
    return <div>
       <h1>{episode.name} - {caption.text}</h1>
       <img src={`${frontendURL}/captions/simple?format=gif&clip_uuid=${caption.id}`}/>

@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.front
+    environment:
+      - "BACKEND=http://cliper"
     depends_on:
       - cliper
 
@@ -16,8 +18,12 @@ services:
       dockerfile: Dockerfile.cliper
     depends_on:
       - db
+    environment:
+      - "CACHE=/cache"
+      - "ELASTIC=http://elasticsearch:9200"
     volumes:
       - "./tv:/tv:ro"
+      - "./cache:/cache"
   
   db:
     image: postgres:latest

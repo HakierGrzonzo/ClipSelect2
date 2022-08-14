@@ -4,6 +4,8 @@ import ffmpeg
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
+from .cache import cache
+
 from .elasticsearch import get_elastic
 
 from app.utils import run_ffmpeg_async
@@ -13,6 +15,7 @@ from .database import Episode, get_async_db, AsyncSession
 from . import models
 
 router = APIRouter()
+
 
 @router.get("/get/{episode_uuid}", response_model=models.Episode)
 async def get_episode_by_uuid(
@@ -30,6 +33,7 @@ async def get_episode_by_uuid(
         .scalars()
         .one()
     )
+
 
 @router.get("/search/{episode_uuid}", response_model=models.Episode)
 async def search_episode_by_uuid(
@@ -92,6 +96,7 @@ async def search_episode_by_uuid(
 
 
 @router.get("/thumb/{episode_uuid}")
+@cache()
 async def get_thumbnail_for_episode(
     episode_uuid: str,
     session: AsyncSession = Depends(get_async_db),

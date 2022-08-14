@@ -1,7 +1,6 @@
 @import '../colors.scss';
 
-a.expandable-card {
-  color: $text-color;
+div.expandable-card {
   margin: .5em;
   border: 2px solid $accent-color;
   transition: all 200ms ease;
@@ -27,6 +26,7 @@ a.expandable-card {
     transition: max-height 400ms ease-in-out;
   }
   div.expandable-card-header {
+    color: $text-color;
     display: flex;
     align-content: space-between; 
     align-items: center;

@@ -83,10 +83,10 @@ async def search_series(
             size=20,
             query={
                 "simple_query_string": {
-                    'query': search_term, 
-                    'analyzer': 'english',
-                    'default_operator': 'and',
-                    'fields': ['text^10', 'next', 'previous']
+                    "query": search_term,
+                    "analyzer": "english",
+                    "default_operator": "and",
+                    "fields": ["text^10", "next", "previous"],
                 },
             },
         )

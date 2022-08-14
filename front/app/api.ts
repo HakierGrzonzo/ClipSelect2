@@ -1,8 +1,12 @@
 import { AppClient } from './client/AppClient';
+import { useContext } from 'react'
+import { IBackendClient, BackendContext } from './root';
 
-export const backendURL = 'http://localhost:8000'
-export const frontendURL = 'http://localhost:8000'
+export const backendURL = (process && process.env.BACKEND) ?? 'http://localhost:8000'
 
 export const backendClient = new AppClient({BASE: backendURL})
-export const frontendClient = new AppClient({BASE: frontendURL})
+
+export function useFrontend(): IBackendClient {
+  return useContext(BackendContext)
+}
 

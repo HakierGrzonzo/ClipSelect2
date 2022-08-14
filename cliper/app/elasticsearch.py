@@ -2,12 +2,15 @@ from typing import AsyncGenerator
 from app.utils import prev_current_next
 from elasticsearch import AsyncElasticsearch
 from elasticsearch.helpers import async_streaming_bulk
+from os import environ
 
 from .database import Series
 
 
 async def get_elastic() -> AsyncGenerator[AsyncElasticsearch, None]:
-    connection = AsyncElasticsearch(hosts=["http://localhost:9200"])
+    connection = AsyncElasticsearch(
+        hosts=[environ.get("ELASTIC", "http://localhost:9200")]
+    )
     yield connection
     await connection.close()
 

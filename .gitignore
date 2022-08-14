@@ -17,6 +17,7 @@ api-keys.env
 /front/app/client
 
 /shelf/
+/cache
 cliper/cache
 /workspace.xml
 node_modules
