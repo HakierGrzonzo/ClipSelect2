@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import List
+from typing import Generator, Iterable, List, TypeVar
 from asyncio import create_subprocess_exec, subprocess
 from tempfile import NamedTemporaryFile
 from typing import Tuple
@@ -98,4 +98,12 @@ def reduce_captions(captions: List[Caption]) -> List[models.FullSubSeries]:
         models.FullSubSeries(**subseries.__dict__, episodes=episodes)
         for subseries, episodes in subseries.items()
     )
-    pass
+
+T = TypeVar('T')
+
+def prev_current_next(iterable: List[T]) -> Generator[Tuple[T | None, T, T | None], None, None]:
+    padded = [None, *iterable, None]
+    for i in range(1, len(iterable) + 1):
+        yield padded[i-1], padded[i], padded[i+1]
+
+

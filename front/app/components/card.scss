@@ -1,9 +1,9 @@
 div.card {
-  margin: 1em;
+  margin: .5em;
   border: 2px solid;
   &.image {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     img {
       height: 100%;
       width: auto;

@@ -1,4 +1,5 @@
 from typing import AsyncGenerator
+from app.utils import prev_current_next
 from elasticsearch import AsyncElasticsearch
 from elasticsearch.helpers import async_streaming_bulk
 
@@ -23,6 +24,8 @@ async def enroll_series_in_elastic(series: Series, es: AsyncElasticsearch):
         actions=[
             {
                 "text": caption.text,
+                "previous": previous.text if previous else None,
+                "next": next.text if next else None,
                 "id": caption.id,
                 "episode": episode.id,
                 "subseries": subseries.id,
@@ -30,7 +33,7 @@ async def enroll_series_in_elastic(series: Series, es: AsyncElasticsearch):
             }
             for subseries in series.subseries
             for episode in subseries.episodes
-            for caption in episode.captions
+            for previous, caption, next in prev_current_next(episode.captions)
         ],
     ):
         pass

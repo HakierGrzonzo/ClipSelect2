@@ -1,0 +1,35 @@
+@import '../colors.scss';
+
+a.expandable-card {
+  color: $text-color;
+  margin: .5em;
+  border: 2px solid $accent-color;
+  transition: all 200ms ease;
+  &:hover, &.expanded {
+    border-color: $link-color;
+  }
+
+  &:not(.expanded) {
+    max-height: 4cm;
+    div.expandable-card-content {
+      max-height: 0;
+    }
+  }
+  &.expanded {
+    div.expandable-card-content {
+      overflow-y: 'scroll'
+    }
+  }
+
+  div.expandable-card-content {
+    max-height: 10cm;
+    overflow-y: hidden;
+    transition: max-height 400ms ease-in-out;
+  }
+  div.expandable-card-header {
+    display: flex;
+    align-content: space-between; 
+    align-items: center;
+    gap: 1ex;
+  }
+}

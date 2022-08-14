@@ -14,9 +14,25 @@ from . import models
 
 router = APIRouter()
 
-
-@router.get("/", response_model=models.Episode)
+@router.get("/get/{episode_uuid}", response_model=models.Episode)
 async def get_episode_by_uuid(
+    episode_uuid: str,
+    session: AsyncSession = Depends(get_async_db),
+):
+    return (
+        (
+            await session.execute(
+                select(Episode)
+                .filter(Episode.id == episode_uuid)
+                .options(selectinload(Episode.captions))
+            )
+        )
+        .scalars()
+        .one()
+    )
+
+@router.get("/search/{episode_uuid}", response_model=models.Episode)
+async def search_episode_by_uuid(
     episode_uuid: str,
     search_term: str,
     session: AsyncSession = Depends(get_async_db),
@@ -33,33 +49,30 @@ async def get_episode_by_uuid(
         .scalars()
         .one()
     )
-    if search_term != "":
-        results = await es.search(
-            index=episode.subseries.series.id,
-            query={
-                "bool": {
-                    "must": [
-                        {
-                            "multi_match": {
-                                "query": episode.id,
-                                "fields": ["episode"],
-                            },
+    results = await es.search(
+        index=episode.subseries.series.id,
+        query={
+            "bool": {
+                "must": [
+                    {
+                        "multi_match": {
+                            "query": episode.id,
+                            "fields": ["episode"],
                         },
-                        {
-                            "multi_match": {
-                                "query": search_term,
-                                "fields": ["text"],
-                            },
+                    },
+                    {
+                        "multi_match": {
+                            "query": search_term,
+                            "fields": ["text"],
                         },
-                    ]
-                },
+                    },
+                ]
             },
-        )
-        result_ids = list(
-            result["_source"]["id"] for result in results["hits"]["hits"]
-        )
-    else:
-        result_ids = []
+        },
+    )
+    result_ids = list(
+        result["_source"]["id"] for result in results["hits"]["hits"]
+    )
     return models.Episode(
         id=episode.id,
         name=episode.name,
@@ -73,12 +86,12 @@ async def get_episode_by_uuid(
                 stop=caption.stop,
             )
             for caption in episode.captions
-            if caption.id.__str__() in result_ids or search_term == ""
+            if caption.id.__str__() in result_ids
         ),
     )
 
 
-@router.get("/{episode_uuid}")
+@router.get("/thumb/{episode_uuid}")
 async def get_thumbnail_for_episode(
     episode_uuid: str,
     session: AsyncSession = Depends(get_async_db),

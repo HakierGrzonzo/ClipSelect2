@@ -10,7 +10,7 @@ interface Image {
 }
 
 interface IProps {
-  children: ReactNode;
+  children?: ReactNode;
   color: string;
   image?: Image;
 }

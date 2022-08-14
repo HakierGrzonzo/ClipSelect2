@@ -80,16 +80,20 @@ async def search_series(
         )
         results = await es.search(
             index=series.id,
+            size=20,
             query={
-                "multi_match": {
-                    "query": search_term,
-                    "fields": ["text"],
+                "simple_query_string": {
+                    'query': search_term, 
+                    'analyzer': 'english',
+                    'default_operator': 'and',
+                    'fields': ['text^10', 'next', 'previous']
                 },
             },
         )
         result_ids = list(
             UUID(result["_source"]["id"]) for result in results["hits"]["hits"]
         )
+        print(results)
         captions = (
             (
                 await session.execute(
