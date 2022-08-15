@@ -5,16 +5,21 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from tempfile import NamedTemporaryFile
 import ffmpeg
 
-from .cache import cache
+from .cache import cache, cache_streaming
 
 from .database import Caption, get_async_db
-from .utils import filter_gif_caption, filter_webm_caption, run_ffmpeg_async
+from .utils import (
+    filter_gif_caption,
+    filter_webm_caption,
+    run_ffmpeg_async,
+    run_ffmpeg_generator,
+)
 
 router = APIRouter()
 
 
 @router.get("/simple")
-@cache()
+@cache_streaming()
 async def get_simple_caption(
     clip_uuid: str,
     format: str = "webm",
@@ -41,26 +46,30 @@ async def get_simple_caption(
         "webm": filter_webm_caption,
         "gif": filter_gif_caption,
     }
-    clip, _ = await run_ffmpeg_async(
-        filters[format](
-            ffmpeg.input(
-                caption.episode.path,
-                **timing,
-            ),
-            temp.name,
-            t=timing["t"],
-        )
-    )
-    temp.close()
+
+    async def content_generator():
+        async for data in run_ffmpeg_generator(
+            filters[format](
+                ffmpeg.input(
+                    caption.episode.path,
+                    **timing,
+                ),
+                temp.name,
+                t=timing["t"],
+            )
+        ):
+            yield data
+        temp.close()
+
     mime = {
         "webm": "video/webm",
         "gif": "image/gif",
     }
-    return Response(content=clip, media_type=mime[format])
+    return {"Content-type": mime[format]}, content_generator()
 
 
 @router.get("/multi")
-@cache()
+@cache_streaming()
 async def get_multi_caption(
     from_clip: str,
     to_clip: str,
@@ -97,14 +106,18 @@ async def get_multi_caption(
     )
     temp.write(subs)
     temp.flush()
-    clip, _ = await run_ffmpeg_async(
-        filter_webm_caption(
-            ffmpeg.input(
-                first_caption.episode.path,
-                **timing,
-            ),
-            temp.name,
-            t=timing["t"],
-        )
-    )
-    return Response(content=clip, media_type="video/webm")
+
+    async def content_generator():
+        async for data in run_ffmpeg_generator(
+            filter_webm_caption(
+                ffmpeg.input(
+                    first_caption.episode.path,
+                    **timing,
+                ),
+                temp.name,
+                t=timing["t"],
+            )
+        ):
+            yield data
+        temp.close()
+    return {"Content-type": "video/webm"}, content_generator()

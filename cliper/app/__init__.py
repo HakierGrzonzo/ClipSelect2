@@ -27,8 +27,7 @@ async def startup_event():
         series = (
             (
                 await session.execute(
-                    select(Series)
-                    .options(
+                    select(Series).options(
                         selectinload(Series.subseries)
                         .joinedload(SubSeries.episodes)
                         .joinedload(Episode.captions)

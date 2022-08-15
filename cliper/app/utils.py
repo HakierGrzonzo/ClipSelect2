@@ -1,5 +1,6 @@
+import asyncio
 from collections import defaultdict
-from typing import Generator, Iterable, List, TypeVar
+from typing import Generator, List, TypeVar, AsyncGenerator
 from asyncio import create_subprocess_exec, subprocess
 from tempfile import NamedTemporaryFile
 from typing import Tuple
@@ -35,6 +36,28 @@ async def run_ffmpeg_async(
     return out, error
 
 
+async def run_ffmpeg_generator(ffmpeg_stream) -> AsyncGenerator[bytes, None]:
+    """
+    Runs ffmpeg expresions from `ffmpeg-python` with asyncio
+
+    ARGS:
+        ffmpeg_stream - stream from `ffmpeg-python`
+    """
+    cmd_line = ffmpeg_stream.compile()
+    proc = await create_subprocess_exec(
+        cmd_line[0],
+        *cmd_line[1:],
+        stdout=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+    )
+    while proc.stdout:
+        data = await proc.stdout.read(1024)
+        if len(data) == 0:
+            break
+        yield data
+    await proc.wait()
+
+
 async def generate_pallette(caption: Caption):
     temp = NamedTemporaryFile("r+b", suffix=".png")
     _, _ = await run_ffmpeg_async(
@@ -49,7 +72,14 @@ async def generate_pallette(caption: Caption):
 
 
 FORMATS = {
-    "webm": {"f": "webm", "c:v": "vp9", "b:v": "750k", 'cpu-used': 3, 'row-mt': 1, "c:a": "libvorbis"},
+    "webm": {
+        "f": "webm",
+        "c:v": "vp9",
+        "b:v": "750k",
+        "cpu-used": 3,
+        "row-mt": 1,
+        "c:a": "libvorbis",
+    },
     "gif": {"r": 10, "f": "gif", "loop": 0, "final_delay": 50},
 }
 

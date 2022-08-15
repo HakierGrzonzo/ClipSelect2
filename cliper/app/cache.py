@@ -6,6 +6,8 @@ from typing import Dict, Iterable
 from os import path, mkdir, environ
 import pickle
 import aiofiles
+from fastapi import Response
+from fastapi.responses import StreamingResponse
 
 CACHE_DIR = environ.get("CACHE", "./cache")
 
@@ -56,6 +58,46 @@ def cache(*, expire: timedelta = timedelta(days=365)):
                 ) as f:
                     await f.write(pickle.dumps(response))
                 return response
+
+        return inner_wrapper
+
+    return outer_wrapper
+
+
+def cache_streaming(*, expire: timedelta = timedelta(days=365)):
+    def outer_wrapper(func):
+        prefix = func.__name__
+
+        @wraps(func)
+        async def inner_wrapper(*args, **kwargs):
+            identifier = prefix + generate_identifier(args, kwargs)
+            try:
+                async with aiofiles.open(
+                    path.join(CACHE_DIR, identifier), "rb"
+                ) as f:
+                    response = pickle.loads(await f.read())
+                    print(f"Responding from CACHE with {identifier}")
+                    return response
+            except:
+                headers, content_generator = await func(*args, **kwargs)
+                headers[
+                    "Cache-Control"
+                ] = f"max-age={expire.total_seconds()}, public"
+
+                async def iterate_over_content():
+                    content = bytes()
+                    async for data in content_generator:
+                        content += data
+                        yield data
+                    cached_response = Response(content, headers=headers)
+                    async with aiofiles.open(
+                        path.join(CACHE_DIR, identifier), "wb+"
+                    ) as f:
+                        await f.write(pickle.dumps(cached_response))
+
+                return StreamingResponse(
+                    iterate_over_content(), headers=headers
+                )
 
         return inner_wrapper
 
