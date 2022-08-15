@@ -80,7 +80,7 @@ async def search_series(
         )
         results = await es.search(
             index=series.id,
-            size=20,
+            size=100,
             query={
                 "simple_query_string": {
                     "query": search_term,

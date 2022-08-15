@@ -49,7 +49,7 @@ async def generate_pallette(caption: Caption):
 
 
 FORMATS = {
-    "webm": {"f": "webm", "c:v": "vp9", "b:v": "750k", "c:a": "libvorbis"},
+    "webm": {"f": "webm", "c:v": "vp9", "b:v": "750k", 'cpu-used': 3, 'row-mt': 1, "c:a": "libvorbis"},
     "gif": {"r": 10, "f": "gif", "loop": 0, "final_delay": 50},
 }
 
