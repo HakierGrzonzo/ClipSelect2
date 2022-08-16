@@ -1,6 +1,9 @@
 {
   "private": true,
   "sideEffects": false,
+  "engines": {
+    "node": ">=14"
+  },
   "scripts": {
     "build": "sass app/:app/; remix build",
     "dev": "remix build && run-p \"dev:*\"",
@@ -9,7 +12,9 @@
     "start": "cross-env NODE_ENV=production node ./server.js",
     "openapi": "openapi --input http://localhost:8000/openapi.json --output ./app/client --client fetch --name AppClient",
     "openprod": "openapi --input ./openapi.json --output ./app/client --client fetch --name AppClient",
-    "sass": "sass --watch app/:app/"
+    "sass": "sass --watch app/:app/",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@remix-run/express": "^1.6.7",
@@ -24,14 +29,12 @@
     "sass": "^1.54.4"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^0.26.1",
     "@remix-run/dev": "^1.6.7",
     "@remix-run/eslint-config": "^1.6.7",
-    "eslint": "^8.20.0",
+    "eslint": "^8.22.0",
     "nodemon": "^2.0.19",
     "npm-run-all": "^4.1.5",
     "openapi-typescript-codegen": "^0.23.0"
-  },
-  "engines": {
-    "node": ">=14"
   }
 }

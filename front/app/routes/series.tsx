@@ -1,9 +1,9 @@
-import { Link, Outlet } from "@remix-run/react";
+import { Link, Outlet } from '@remix-run/react'
 
-export default function() {
+export default function () {
   return (
     <>
-      <Link to='/'>go back</Link>
+      <Link to="/">go back</Link>
       <article>
         <Outlet/>
       </article>

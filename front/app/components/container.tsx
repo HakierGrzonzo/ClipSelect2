@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react'
 
 interface IProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export function Container(props: IProps) {
@@ -9,5 +9,5 @@ export function Container(props: IProps) {
     <main>
       {props.children}
     </main>
-  );
+  )
 }

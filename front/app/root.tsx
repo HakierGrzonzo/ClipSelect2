@@ -6,40 +6,40 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-} from "@remix-run/react";
+} from '@remix-run/react'
 
-import { Container } from './components';
+import { createContext } from 'react'
+import { json } from '@remix-run/node'
+import { Container } from './components'
 import styles from './base.css'
 import { AppClient } from './client/AppClient'
-import { createContext } from 'react'
-import { json } from "@remix-run/node";
 
 export const meta = () => ({
-  charset: "utf-8",
-  title: "ClipSelect2",
-  viewport: "width=device-width,initial-scale=1",
-});
+  charset: 'utf-8',
+  title: 'ClipSelect2',
+  viewport: 'width=device-width,initial-scale=1',
+})
 
 export function links() {
-  return [{rel: 'stylesheet', href: styles }]
+  return [{ rel: 'stylesheet', href: styles }]
 }
 
 interface IBackendProps {
-  frontendURL: string;
+  frontendURL: string
 }
 
 export interface IBackendClient extends IBackendProps {
-  frontendClient: AppClient;
+  frontendClient: AppClient
 }
 export const loader = () => {
-  return json({frontendURL: process.env.FRONTEND ?? 'http://localhost:8000'})
+  return json({ frontendURL: process.env.FRONTEND ?? 'http://localhost:8000' })
 }
 
 export const BackendContext = createContext<IBackendClient>({} as IBackendClient)
 
 export default function App() {
-  const {frontendURL} = useLoaderData() as IBackendProps;
-  const frontendClient = new AppClient({BASE: frontendURL})
+  const { frontendURL } = useLoaderData() as IBackendProps
+  const frontendClient = new AppClient({ BASE: frontendURL })
   return (
     <html lang="en">
       <head>
@@ -47,8 +47,8 @@ export default function App() {
 
         <Links />
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-        <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap" rel="stylesheet"/> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin/>
+        <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap" rel="stylesheet"/>
       </head>
 
       <body>
@@ -59,7 +59,7 @@ export default function App() {
             */}
           var process = undefined
         </script>
-        <BackendContext.Provider value={{frontendClient, frontendURL}}>
+        <BackendContext.Provider value={{ frontendClient, frontendURL }}>
           <Container>
             <Outlet />
           </Container>
@@ -68,9 +68,8 @@ export default function App() {
 
         <ScrollRestoration />
 
-
         <LiveReload />
       </body>
     </html>
-  );
+  )
 }
