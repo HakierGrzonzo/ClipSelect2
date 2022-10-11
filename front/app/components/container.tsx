@@ -1,13 +1,9 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from "react";
 
 interface IProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export function Container(props: IProps) {
-  return (
-    <main>
-      {props.children}
-    </main>
-  )
+  return <main>{props.children}</main>;
 }

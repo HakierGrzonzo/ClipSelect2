@@ -1,5 +1,5 @@
-@import 'colors';
-@import 'text';
+@import "colors";
+@import "text";
 
 body {
   min-height: 100vh;
@@ -8,16 +8,19 @@ body {
   padding: 0;
   background-color: $background-color;
   color: $text-color;
-  font-family: 'Karla', sans-serif;
+  font-family: "Karla", sans-serif;
   font-size: $normal-text;
   main {
     padding: 2em;
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-weight: 700;
   }
   a {
-    color: $link-color
+    color: $link-color;
   }
 }
 
@@ -52,6 +55,29 @@ label {
     color: $text-color;
     &:focus {
       border: 2px solid $link-color !important;
+    }
+  }
+}
+
+.download-buttons {
+  a {
+    display: block;
+    margin: 3mm;
+    padding: 3mm;
+    color: var(--foreground);
+    text-decoration: none;
+    background-color: $link-color;
+    border: 1px solid $link-color;
+    position: relative;
+    top: 0;
+    left: 0;
+    transition: all 200ms ease-in-out;
+    &:hover {
+      background-color: $background-color;
+      border-color: $accent-color;
+      top: -3px;
+      left: -5px;
+      box-shadow: 5px 3px 0px $accent-color;
     }
   }
 }

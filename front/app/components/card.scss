@@ -1,5 +1,6 @@
+@import "../colors";
 div.card {
-  margin: .5em;
+  margin: 0.5em;
   border: 2px solid;
   &.image {
     display: flex;
@@ -8,11 +9,24 @@ div.card {
       height: 100%;
       width: auto;
     }
-    div.child-content { 
-      flex: 3
+    div.child-content {
+      flex: 3;
     }
   }
-  div.child-content { 
+  div.child-content {
     padding: 1em;
+  }
+  &.clickable {
+    position: relative;
+    top: 0;
+    left: 0;
+    transition: all 200ms ease-in-out;
+    &:hover {
+      background-color: $background-color;
+      border-color: $accent-color !important;
+      top: -3px;
+      left: -5px;
+      box-shadow: 5px 3px 0px $accent-color;
+    }
   }
 }

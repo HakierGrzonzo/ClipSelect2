@@ -1,10 +1,11 @@
-@import '../colors.scss';
+@import "../colors.scss";
 
 div.expandable-card {
-  margin: .5em;
+  margin: 0.5em;
   border: 2px solid $accent-color;
   transition: all 200ms ease;
-  &:hover, &.expanded {
+  &:hover,
+  &.expanded {
     border-color: $link-color;
   }
 
@@ -16,7 +17,7 @@ div.expandable-card {
   }
   &.expanded {
     div.expandable-card-content {
-      overflow-y: 'scroll'
+      overflow-y: "scroll";
     }
   }
 
@@ -28,7 +29,7 @@ div.expandable-card {
   div.expandable-card-header {
     color: $text-color;
     display: flex;
-    align-content: space-between; 
+    align-content: space-between;
     align-items: center;
     gap: 1ex;
   }
