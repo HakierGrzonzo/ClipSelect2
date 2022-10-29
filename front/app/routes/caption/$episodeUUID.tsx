@@ -1,11 +1,15 @@
-import type { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useReducer, useEffect } from "react";
 import { backendClient, useFrontend } from "../../api";
 import type { Caption } from "../../client/models/Caption";
 import type { Episode } from "../../client/models/Episode";
-import captionStyles from "./caption.css"
+import styles from "../../caption.css";
 import { ClipList, ClipListLinks, Trange } from "../../components";
 
 interface IEpisodeAndCaption {
@@ -39,7 +43,7 @@ const reducer = (captions: Caption[]) => {
 };
 
 export const links: LinksFunction = () => {
-  return [...ClipListLinks(), {rel: 'stylesheet', href: captionStyles}];
+  return [...ClipListLinks(), { rel: "stylesheet", href: styles }];
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -54,13 +58,13 @@ export const loader: LoaderFunction = async ({ params }) => {
 };
 
 export const meta: MetaFunction = (data) => {
-  const {episode} = data.data;
+  const { episode } = data.data;
   return {
     title: `ClipSelect | ${episode.name}`,
     description: `Generate clips for ${episode.name}!`,
-    'og:image': `https://clipapi.grzegorzkoperwas.site/episode/thumb/${episode.id}`
-  }
-}
+    "og:image": `https://clipapi.grzegorzkoperwas.site/episode/thumb/${episode.id}`,
+  };
+};
 
 export default function () {
   const { episode } = useLoaderData() as IEpisodeAndCaption;
@@ -79,8 +83,6 @@ export default function () {
     setSelectedCaptions(...(captionCandidates as [Caption]));
   }, [process]);
 
-  console.log(selectedCaptions);
-
   return (
     <div>
       <h1>{episode.name}</h1>
@@ -92,9 +94,7 @@ export default function () {
             setSelectedRange={setSelectedCaptions}
           />
         </div>
-        <div
-          className="download-buttons download-menu"
-        >
+        <div className="download-buttons download-menu">
           {selectedCaptions !== undefined ? (
             selectedCaptions.length === 1 ? (
               <>

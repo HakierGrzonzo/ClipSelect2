@@ -17,9 +17,9 @@ body {
   gap: 3em;
   main {
     margin-top: calc(40px + 2em);
-    padding-left: .3em;
-    padding-right: .3em;
-    flex: 1
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    flex: 1;
   }
   h1,
   h2,
@@ -86,35 +86,6 @@ label {
       top: -3px;
       left: -5px;
       box-shadow: 5px 3px 0px $accent-color;
-    }
-  }
-}
-
-.download-menu {
-  @media screen and (min-width: 20cm) {
-    position: sticky;
-    height: 100vh;
-    top: 4em;
-  }
-  @media screen and (max-width: 20cm) {
-    right: 0;
-    left: 0;
-    background-color: $background-color;
-    position: fixed;
-    top: calc(40px + .6em);
-    height: 7cm;
-    margin-left: .3em;
-    margin-right: .3em;
-  }
-}
-
-.caption-split {
-  @media screen and (min-width: 20cm) {
-    gap: 1em;
-    display: grid;
-    grid-template-columns: minmax(30ex, max-content) 1fr;
-    div.split-child:first-child {
-      padding: 0 6ex 0 0;
     }
   }
 }

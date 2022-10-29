@@ -1,8 +1,8 @@
-import { Link } from '@remix-run/react';
-import styles from './Appbar.css';
+import { Link } from "@remix-run/react";
+import styles from "./Appbar.css";
 
 export function links() {
-  return [{rel: "stylesheet", href: styles}]
+  return [{ rel: "stylesheet", href: styles }];
 }
 
 export function AppBar() {
@@ -10,11 +10,9 @@ export function AppBar() {
     <nav>
       <div className="inner">
         <h1>
-          <Link to="/">
-            ClipSelect
-          </Link>
+          <Link to="/">ClipSelect</Link>
         </h1>
       </div>
     </nav>
-  )
+  );
 }

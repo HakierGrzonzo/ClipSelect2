@@ -70,7 +70,7 @@ export default function App() {
           var process = undefined
         </script>
         <BackendContext.Provider value={{ frontendClient, frontendURL }}>
-          <AppBar/>
+          <AppBar />
           <Container>
             <Outlet />
           </Container>
