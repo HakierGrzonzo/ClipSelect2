@@ -1,0 +1,32 @@
+@import "../colors";
+
+nav {
+  position: fixed;
+  z-index: 1;
+  top: 0px;
+  height: 40px;
+  right: 0px;
+  width: 100vw;
+  background-color: $link-color;
+  padding-top: .3em;
+  padding-bottom: .3em;
+  div.inner {
+    max-width: 30cm;
+    margin-left: auto;
+    padding-left: .3em;
+    padding-right: .3em;
+    margin-right: auto;
+    a {
+      color: $text-color;
+      text-decoration: none;
+      transition: all 200ms;
+      &:hover {
+        color: $accent-color;
+      }
+    }
+    h1 {
+      margin: 0;
+    }
+  }
+  margin-bottom: 1em;
+}

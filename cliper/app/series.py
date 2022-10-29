@@ -1,10 +1,12 @@
 from typing import List
 from uuid import UUID
 from elasticsearch import AsyncElasticsearch
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi.responses import FileResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
+from app.cache import cache_headers
 
 from app.elasticsearch import get_elastic
 from app.utils import reduce_captions
@@ -61,6 +63,16 @@ async def get_series_by_title(
         return series
     except:
         raise HTTPException(status_code=404, detail="Series not found")
+
+@router.get('/{id}/cover.jpg')
+@cache_headers()
+async def get_cover(id: str, session: AsyncSession = Depends(get_async_db)):
+    try:
+        series = await session.execute(select(Series).filter(Series.id == id))
+        return FileResponse(series.unique().scalars().one().poster_path)
+    except Exception as e:
+        raise e
+        return Response("Cover not found!", status_code=404)
 
 
 @router.get("/search/{title}", response_model=models.CaptionSeries)

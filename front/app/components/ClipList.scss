@@ -4,8 +4,10 @@
 div.clip-list {
   display: flex;
   flex-direction: column;
-  grid-template-columns: 10ex 2ex 1fr;
   width: 60vw;
+  @media screen and (max-width: 20cm) {
+    width: 96vw;
+  }
   column-gap: 1em;
   div.clip-entry {
     cursor: pointer;
@@ -15,8 +17,8 @@ div.clip-list {
         border-color: $accent-color;
       }
     }
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 3cm 1cm 1fr;
     justify-items: center;
     .clip-separator {
       margin-left: 0.5em;
@@ -31,12 +33,13 @@ div.clip-list {
       }
     }
     .clip-list-time {
-      width: 10ex;
+      width: 3cm;
       margin-top: 1em;
       margin-bottom: 1em;
     }
     .clip-list-text {
       align-self: center;
+      justify-self: start;
     }
   }
 }

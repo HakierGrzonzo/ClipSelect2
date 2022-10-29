@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Outlet, useLoaderData } from "@remix-run/react";
 import { Card, CardLinks } from "../../components";
@@ -27,6 +27,15 @@ export const loader: LoaderFunction = async ({ params, request }) => {
     query,
   });
 };
+
+export const meta: MetaFunction = (data) => {
+  const loaderData = data.data as ISeriesWithParam
+    return {
+        title: `ClipSelect | ${loaderData.series.name}`,
+        description: `Generate gifs for ${loaderData.series.name}! Create webm of gif with caption`,
+        'og:image': `https://clipapi.grzegorzkoperwas.site/series/${loaderData.series.id}/cover.jpg`
+    }
+}
 
 export default function () {
   const { series, query } = useLoaderData() as unknown as ISeriesWithParam;

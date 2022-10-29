@@ -48,6 +48,7 @@ async def walk_subseries(folder_path: str) -> SubSeries:
 async def walk_series(folder_path: str) -> Series:
     subseries_walkers = []
     meta = None
+    poster = None
     for element in listdir(folder_path):
         if element.endswith(".nfo"):
             async with open(path.join(folder_path, element)) as f:
@@ -56,8 +57,11 @@ async def walk_series(folder_path: str) -> Series:
             subseries_walkers.append(
                 Task(walk_subseries(path.join(folder_path, element)))
             )
+        elif element.startswith("poster"):
+            poster = path.join(folder_path, element)
+
     if meta is None:
         raise Exception(f"Failed to find meta in {folder_path}")
     subseries = await gather(*subseries_walkers)
-    series = Series(name=meta["name"], subseries=subseries)
+    series = Series(name=meta["name"], subseries=subseries, poster_path = poster)
     return series

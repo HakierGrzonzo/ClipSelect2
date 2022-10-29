@@ -40,6 +40,7 @@ class Series(Base):
         back_populates="series",
         passive_deletes=True,
     )
+    poster_path = Column(String(256), nullable=True)
 
     __mapper_args__ = {"eager_defaults": True}
 

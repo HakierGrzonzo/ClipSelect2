@@ -10,9 +10,10 @@ import {
 
 import { createContext } from "react";
 import { json } from "@remix-run/node";
-import { Container } from "./components";
+import { Container, AppBar, AppBarLinks } from "./components";
 import styles from "./base.css";
 import { AppClient } from "./client/AppClient";
+import Footer from "./components/Footer";
 
 export const meta = () => ({
   charset: "utf-8",
@@ -21,7 +22,7 @@ export const meta = () => ({
 });
 
 export function links() {
-  return [{ rel: "stylesheet", href: styles }];
+  return [{ rel: "stylesheet", href: styles }, ...AppBarLinks()];
 }
 
 interface IBackendProps {
@@ -69,9 +70,11 @@ export default function App() {
           var process = undefined
         </script>
         <BackendContext.Provider value={{ frontendClient, frontendURL }}>
+          <AppBar/>
           <Container>
             <Outlet />
           </Container>
+          <Footer />
           <Scripts />
         </BackendContext.Provider>
 

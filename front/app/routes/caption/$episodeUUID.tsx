@@ -1,10 +1,11 @@
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useReducer, useEffect } from "react";
 import { backendClient, useFrontend } from "../../api";
 import type { Caption } from "../../client/models/Caption";
 import type { Episode } from "../../client/models/Episode";
+import captionStyles from "./caption.css"
 import { ClipList, ClipListLinks, Trange } from "../../components";
 
 interface IEpisodeAndCaption {
@@ -38,7 +39,7 @@ const reducer = (captions: Caption[]) => {
 };
 
 export const links: LinksFunction = () => {
-  return [...ClipListLinks()];
+  return [...ClipListLinks(), {rel: 'stylesheet', href: captionStyles}];
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -51,6 +52,15 @@ export const loader: LoaderFunction = async ({ params }) => {
     episode,
   });
 };
+
+export const meta: MetaFunction = (data) => {
+  const {episode} = data.data;
+  return {
+    title: `ClipSelect | ${episode.name}`,
+    description: `Generate clips for ${episode.name}!`,
+    'og:image': `https://clipapi.grzegorzkoperwas.site/episode/thumb/${episode.id}`
+  }
+}
 
 export default function () {
   const { episode } = useLoaderData() as IEpisodeAndCaption;
@@ -74,7 +84,7 @@ export default function () {
   return (
     <div>
       <h1>{episode.name}</h1>
-      <div className="split">
+      <div className="caption-split">
         <div className="split-child">
           <ClipList
             captions={episode.captions}
@@ -83,8 +93,7 @@ export default function () {
           />
         </div>
         <div
-          className="download-buttons"
-          style={{ position: "sticky", height: "30vh", top: "1em" }}
+          className="download-buttons download-menu"
         >
           {selectedCaptions !== undefined ? (
             selectedCaptions.length === 1 ? (
@@ -124,7 +133,7 @@ export default function () {
               </>
             )
           ) : (
-            <p>Please select a caption on the right</p>
+            <p>Please select a caption</p>
           )}
         </div>
       </div>
