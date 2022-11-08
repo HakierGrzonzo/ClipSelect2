@@ -35,6 +35,6 @@ async def add_new_series(
 async def drop_all_series(session: AsyncSession = Depends(get_async_db)):
     try:
         await session.execute(delete(Series))
-        return f"Droped all series!"
+        return "Droped all series!"
     finally:
         await session.commit()

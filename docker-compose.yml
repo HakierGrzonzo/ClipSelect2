@@ -22,7 +22,7 @@ services:
       - "CACHE=/cache"
       - "ELASTIC=http://elasticsearch:9200"
     volumes:
-      - "./tv:/tv:ro"
+      - "./tv:/tv"
       - "./cache:/cache"
   
   db:
@@ -33,6 +33,8 @@ services:
       - POSTGRES_DB=clipselect
     volumes:
       - "./db:/var/lib/postgresql/data/"
+    ports:
+      - "5432:5432"
 
   pgadmin:
     container_name: pgadmin

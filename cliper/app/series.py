@@ -64,7 +64,8 @@ async def get_series_by_title(
     except:
         raise HTTPException(status_code=404, detail="Series not found")
 
-@router.get('/{id}/cover.jpg')
+
+@router.get("/{id}/cover.jpg")
 @cache_headers()
 async def get_cover(id: str, session: AsyncSession = Depends(get_async_db)):
     try:

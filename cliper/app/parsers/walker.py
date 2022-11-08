@@ -28,6 +28,7 @@ async def walk_subseries(folder_path: str) -> SubSeries:
                     }
                 # parse episode nfo
         elif any(element.endswith(x) for x in [".mkv", ".mp4"]):
+            print(element)
             suffix = element.split(".")[-1]
             episodes[element.removesuffix(f".{suffix}")]["path"] = path.join(
                 folder_path, element
@@ -63,5 +64,5 @@ async def walk_series(folder_path: str) -> Series:
     if meta is None:
         raise Exception(f"Failed to find meta in {folder_path}")
     subseries = await gather(*subseries_walkers)
-    series = Series(name=meta["name"], subseries=subseries, poster_path = poster)
+    series = Series(name=meta["name"], subseries=subseries, poster_path=poster)
     return series

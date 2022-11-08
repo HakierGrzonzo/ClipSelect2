@@ -33,6 +33,7 @@ def generate_identifier(args: Iterable, kwargs: Dict):
             pass
     return ":".join(list(b64encode(s.encode()).decode() for s in serialized))
 
+
 def cache_headers(expire: timedelta = timedelta(days=365)):
     def outer_wrapper(func):
         @wraps(func)
@@ -43,7 +44,7 @@ def cache_headers(expire: timedelta = timedelta(days=365)):
                     "Cache-Control"
                 ] = f"max-age={expire.total_seconds()}, public"
             return response
-        
+
         return inner_wrapper
 
     return outer_wrapper

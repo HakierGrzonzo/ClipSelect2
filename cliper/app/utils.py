@@ -1,4 +1,3 @@
-import asyncio
 from collections import defaultdict
 from typing import Generator, List, TypeVar, AsyncGenerator
 from asyncio import create_subprocess_exec, subprocess
@@ -8,7 +7,7 @@ import ffmpeg
 
 from . import models
 
-from .database import Caption, Episode, Series, SubSeries
+from .database import Caption
 
 
 async def run_ffmpeg_async(
@@ -26,7 +25,7 @@ async def run_ffmpeg_async(
         *cmd_line[1:],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        stdin=subprocess.PIPE,
+        stdin=subprocess.PIPE if input else None,
     )
     out, error = await proc.communicate(input)
     if await proc.wait() != 0:
@@ -74,12 +73,12 @@ async def generate_pallette(caption: Caption):
 FORMATS = {
     "webm": {
         "f": "webm",
-        "deadline": 'realtime',
+        "deadline": "realtime",
         "row-mt": 1,
         "c:v": "vp8",
         "crf": 20,
         "b:v": "3M",
-        "cpu-used": 1, 
+        "cpu-used": 1,
         "c:a": "libvorbis",
     },
     "gif": {"r": 10, "f": "gif", "loop": 0, "final_delay": 50},
