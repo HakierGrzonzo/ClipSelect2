@@ -1,11 +1,10 @@
-from typing import final
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from tempfile import NamedTemporaryFile
 import ffmpeg
 
-from .cache import cache, cache_streaming
+from .cache import cache_streaming
 
 from .database import Caption, get_async_db
 from .utils import (
@@ -21,12 +20,12 @@ router = APIRouter()
 @router.get("/simple")
 @cache_streaming()
 async def get_simple_caption(
-    clip_uuid: str,
+    clip_id: int,
     format: str = "webm",
     session: AsyncSession = Depends(get_async_db),
 ):
     caption = (
-        (await session.execute(select(Caption).filter(Caption.id == clip_uuid)))
+        (await session.execute(select(Caption).filter(Caption.id == clip_id)))
         .scalars()
         .one()
     )
@@ -55,6 +54,11 @@ async def get_simple_caption(
                     **timing,
                 ),
                 temp.name,
+                *(
+                    [str(caption.episode.audio_track_index)]
+                    if format == "webm"
+                    else []
+                ),
                 t=timing["t"],
             )
         ):
@@ -71,8 +75,8 @@ async def get_simple_caption(
 @router.get("/multi")
 @cache_streaming()
 async def get_multi_caption(
-    from_clip: str,
-    to_clip: str,
+    from_clip: int,
+    to_clip: int,
     session: AsyncSession = Depends(get_async_db),
 ):
     captions = (
@@ -106,6 +110,7 @@ async def get_multi_caption(
     )
     temp.write(subs)
     temp.flush()
+    print(first_caption.episode.audio_track_index)
 
     async def content_generator():
         async for data in run_ffmpeg_generator(
@@ -115,6 +120,7 @@ async def get_multi_caption(
                     **timing,
                 ),
                 temp.name,
+                str(first_caption.episode.audio_track_index),
                 t=timing["t"],
             )
         ):

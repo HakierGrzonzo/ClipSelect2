@@ -67,7 +67,7 @@ async def get_series_by_title(
 
 @router.get("/{id}/cover.jpg")
 @cache_headers()
-async def get_cover(id: str, session: AsyncSession = Depends(get_async_db)):
+async def get_cover(id: int, session: AsyncSession = Depends(get_async_db)):
     try:
         series = await session.execute(select(Series).filter(Series.id == id))
         return FileResponse(series.unique().scalars().one().poster_path)
@@ -104,7 +104,7 @@ async def search_series(
             },
         )
         result_ids = list(
-            UUID(result["_source"]["id"]) for result in results["hits"]["hits"]
+            result["_source"]["id"] for result in results["hits"]["hits"]
         )
         captions = (
             (

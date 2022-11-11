@@ -1,9 +1,9 @@
-from typing import List, Optional
-from pydantic import UUID4, BaseModel
+from typing import List
+from pydantic import BaseModel
 
 
 class _protoModel(BaseModel):
-    id: UUID4
+    id: int
     name: str
 
     class Config:
@@ -11,7 +11,7 @@ class _protoModel(BaseModel):
 
 
 class Caption(BaseModel):
-    id: UUID4
+    id: int
     text: str
     order: int
     start: float

@@ -30,11 +30,9 @@ def parse_srt_string(subs: str):
                 or len(clean_text) < 2
                 or stop_timestamp - start_timestamp < 0.1
             ):
-                print(f"Wierd subtitle: '{clean_text}'")
                 continue
             if last_subtitle:
                 if last_subtitle.stop > start_timestamp:
-                    print(f"Wierd overlap subtitle: '{clean_text}'")
                     continue
             last_subtitle = Subtitle(
                 start=start_timestamp, stop=stop_timestamp, text=clean_text

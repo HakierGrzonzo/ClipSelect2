@@ -39,8 +39,7 @@ async def walk_subseries(folder_path: str) -> SubSeries:
         *[parse_episode_into_clips(v) for v in episodes.values()]
     )
     subseries = SubSeries(
-        name=meta["name"],
-        order=meta["order"],
+        **meta,
         episodes=list(episodes),
     )
     return subseries
@@ -64,5 +63,5 @@ async def walk_series(folder_path: str) -> Series:
     if meta is None:
         raise Exception(f"Failed to find meta in {folder_path}")
     subseries = await gather(*subseries_walkers)
-    series = Series(name=meta["name"], subseries=subseries, poster_path=poster)
+    series = Series(**meta, subseries=subseries, poster_path=poster)
     return series

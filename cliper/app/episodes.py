@@ -17,16 +17,16 @@ from . import models
 router = APIRouter()
 
 
-@router.get("/get/{episode_uuid}", response_model=models.Episode)
+@router.get("/get/{episode_id}", response_model=models.Episode)
 async def get_episode_by_uuid(
-    episode_uuid: str,
+    episode_id: int,
     session: AsyncSession = Depends(get_async_db),
 ):
     return (
         (
             await session.execute(
                 select(Episode)
-                .filter(Episode.id == episode_uuid)
+                .filter(Episode.id == episode_id)
                 .options(selectinload(Episode.captions))
             )
         )
@@ -35,9 +35,9 @@ async def get_episode_by_uuid(
     )
 
 
-@router.get("/search/{episode_uuid}", response_model=models.Episode)
-async def search_episode_by_uuid(
-    episode_uuid: str,
+@router.get("/search/{episode_id}", response_model=models.Episode)
+async def search_episode_by_id(
+    episode_id: int,
     search_term: str,
     session: AsyncSession = Depends(get_async_db),
     es: AsyncElasticsearch = Depends(get_elastic),
@@ -46,7 +46,7 @@ async def search_episode_by_uuid(
         (
             await session.execute(
                 select(Episode)
-                .filter(Episode.id == episode_uuid)
+                .filter(Episode.id == episode_id)
                 .options(selectinload(Episode.captions))
             )
         )
@@ -95,17 +95,17 @@ async def search_episode_by_uuid(
     )
 
 
-@router.get("/thumb/{episode_uuid}")
+@router.get("/thumb/{episode_id}")
 @cache()
 async def get_thumbnail_for_episode(
-    episode_uuid: str,
+    episode_id: int,
     session: AsyncSession = Depends(get_async_db),
 ) -> Response:
     episode = (
         (
             await session.execute(
                 select(Episode)
-                .filter(Episode.id == episode_uuid)
+                .filter(Episode.id == episode_id)
                 .options(selectinload(Episode.captions))
             )
         )

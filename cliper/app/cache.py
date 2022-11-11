@@ -95,7 +95,10 @@ def cache_streaming(*, expire: timedelta = timedelta(days=365)):
                     print(f"Responding from CACHE with {identifier}")
                     return response
             except:
-                headers, content_generator = await func(*args, **kwargs)
+                res = await func(*args, **kwargs)
+                if not isinstance(res, tuple):
+                    return res
+                headers, content_generator = res
                 headers[
                     "Cache-Control"
                 ] = f"max-age={expire.total_seconds()}, public"

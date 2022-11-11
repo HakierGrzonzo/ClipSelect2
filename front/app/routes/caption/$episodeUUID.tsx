@@ -77,7 +77,7 @@ export default function () {
     if (process) return;
     const captionId = document.location.hash.slice(1);
     const captionCandidates = episode.captions.filter(
-      (caption) => caption.id === captionId
+      (caption) => caption.id === Number.parseInt(captionId)
     );
     if (captionCandidates.length !== 1) return;
     setSelectedCaptions(...(captionCandidates as [Caption]));
@@ -101,14 +101,14 @@ export default function () {
                 <h4>Download a simple clip</h4>
                 <a
                   target="_blank"
-                  href={`${frontendURL}/captions/simple?clip_uuid=${selectedCaptions[0].id}&format=gif`}
+                  href={`${frontendURL}/captions/simple?clip_id=${selectedCaptions[0].id}&format=gif`}
                   rel="noreferrer"
                 >
                   Download gif
                 </a>
                 <a
                   target="_blank"
-                  href={`${frontendURL}/captions/simple?clip_uuid=${selectedCaptions[0].id}`}
+                  href={`${frontendURL}/captions/simple?clip_id=${selectedCaptions[0].id}`}
                   rel="noreferrer"
                 >
                   Download webm

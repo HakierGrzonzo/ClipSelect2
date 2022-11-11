@@ -104,12 +104,15 @@ def filter_gif_caption(stream, subtitle_filename: str, **output_params):
     ).output("pipe:", **output_params, **FORMATS["gif"])
 
 
-def filter_webm_caption(stream, subtitle_filename: str, **output_params):
+def filter_webm_caption(
+    stream, subtitle_filename: str, audio_index: str, **output_params
+):
+    print(audio_index)
     return ffmpeg.output(
         add_subtitle_filter(
             stream.video.filter("scale", -1, 480), subtitle_filename
         ),
-        stream.audio,
+        stream[audio_index],
         "pipe:",
         **output_params,
         **FORMATS["webm"],

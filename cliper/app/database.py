@@ -1,9 +1,7 @@
 from typing import AsyncGenerator
-from uuid import uuid4
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import relationship, sessionmaker, declarative_base
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import (
     ForeignKey,
     Integer,
@@ -32,7 +30,7 @@ Base: DeclarativeMeta = declarative_base()
 
 class Series(Base):
     __tablename__ = "Series"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    id = Column(Integer(), primary_key=True, index=True)
     name = Column(String(128), nullable=False, index=True)
     subseries = relationship(
         "SubSeries",
@@ -47,9 +45,9 @@ class Series(Base):
 
 class SubSeries(Base):
     __tablename__ = "SubSeries"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    id = Column(Integer(), primary_key=True, index=True)
     series_id = Column(
-        UUID(as_uuid=True),
+        Integer(),
         ForeignKey("Series.id", use_alter=True, ondelete="CASCADE"),
         index=True,
         nullable=False,
@@ -71,9 +69,9 @@ class SubSeries(Base):
 
 class Episode(Base):
     __tablename__ = "Episode"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    id = Column(Integer(), primary_key=True, index=True)
     subseries_id = Column(
-        UUID(as_uuid=True),
+        Integer(),
         ForeignKey("SubSeries.id", use_alter=True, ondelete="CASCADE"),
         nullable=False,
         index=True,
@@ -94,15 +92,16 @@ class Episode(Base):
     )
 
     subtitle_track_index = Column(Integer(), nullable=False)
+    audio_track_index = Column(Integer(), nullable=False)
 
     __mapper_args__ = {"eager_defaults": True}
 
 
 class Caption(Base):
     __tablename__ = "Caption"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    id = Column(Integer(), primary_key=True, index=True)
     episode_id = Column(
-        UUID(as_uuid=True),
+        Integer(),
         ForeignKey("Episode.id", use_alter=True, ondelete="CASCADE"),
         index=True,
         nullable=False,
@@ -112,7 +111,7 @@ class Caption(Base):
     # The content of the subtitles for the caption
     text = Column(String(256), nullable=False)
 
-    # The order the caption apprears in
+    # The order the caption appears in
     order = Column(Integer())
 
     # start/end of caption in seconds
