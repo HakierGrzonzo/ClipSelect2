@@ -11,8 +11,10 @@ export const loader: LoaderFunction = async ({ params }) => {
   const { seriesName } = params;
   const series =
     await backendClient.series.getSeriesByTitleSeriesByTitleTitleGet(
-      seriesName
+      seriesName!
     );
+  series.subseries.sort((a, b) => a.order - b.order)
+  series.subseries.forEach((subseries) => subseries.episodes.sort((a, b) => a.order - b.order))
   return json(series);
 };
 

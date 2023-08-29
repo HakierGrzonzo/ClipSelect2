@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import { LinksFunction, LoaderFunction, redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { Fragment } from "react";
@@ -19,9 +19,12 @@ export const links: LinksFunction = () => {
 export const loader: LoaderFunction = async ({ params, request }) => {
   const { seriesName } = params;
   const query = new URL(request.url).searchParams.get("query");
+  if (!query) {
+    throw redirect(`/series/${encodeURI(seriesName!)}`)
+  }
   const series = await backendClient.series.searchSeriesSeriesSearchTitleGet(
-    seriesName,
-    query
+    seriesName!,
+    query!
   );
   return json(series);
 };

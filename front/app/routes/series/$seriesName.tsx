@@ -24,8 +24,9 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   const query = new URL(request.url).searchParams.get("query");
   const series =
     await backendClient.series.getSeriesByTitleSeriesByTitleTitleGet(
-      seriesName
+      seriesName!
     );
+  series.subseries.sort((a, b) => a.order - b.order)
   return json({
     series,
     query,
